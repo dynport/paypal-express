@@ -35,6 +35,17 @@ module Paypal
         Response.new response
       end
 
+      def capture!(transaction_id, amount, currency_code=:USD, options={})
+        params = {
+          :AUTHORIZATIONID  => transaction_id,
+          :AMT              => Util.formatted_amount(amount),
+          :CURRENCYCODE     => currency_code,
+          :COMPLETETYPE     => options.delete(:incomplete) ? 'NotComplete' : 'Complete'
+        }.merge(options)
+        response = self.request :DoCapture, params
+        Response.new response
+      end
+
       def subscribe!(token, recurring_profile)
         params = {
           :TOKEN => token

@@ -176,6 +176,27 @@ describe Paypal::Express::Request do
     end
   end
 
+  describe '#capture!' do
+    it 'should return Paypal::Express::Response' do
+      fake_response 'DoCapture/success'
+      response = instance.capture! 'authorization_id', 14.00, :EUR
+      response.should be_instance_of(Paypal::Express::Response)
+    end
+
+    it 'should call DoCapture' do
+      expect do
+        instance.capture! 'authorization_id', 14.00, :EUR
+      end.should request_to nvp_endpoint, :post
+      instance._method_.should == :DoCapture
+      instance._sent_params_.should == {
+        :AUTHORIZATIONID  => 'authorization_id',
+        :AMT              => '14.00',
+        :CURRENCYCODE     => :EUR,
+        :COMPLETETYPE     => 'Complete'
+      }
+    end
+  end
+
   describe '#subscribe!' do
     it 'should return Paypal::Express::Response' do
       fake_response 'CreateRecurringPaymentsProfile/success'
