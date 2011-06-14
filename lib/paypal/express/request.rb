@@ -2,11 +2,11 @@ module Paypal
   module Express
     class Request < NVP::Request
 
-      def setup(payment_requests, return_url, cancel_url, options = {})
+      def setup(payment_requests, return_url, cancel_url, parameters={}, options = {})
         params = {
           :RETURNURL => return_url,
           :CANCELURL => cancel_url
-        }
+        }.merge(parameters)
         if options[:no_shipping]
           params[:REQCONFIRMSHIPPING] = 0
           params[:NOSHIPPING] = 1
@@ -43,6 +43,15 @@ module Paypal
           :COMPLETETYPE     => options.delete(:incomplete) ? 'NotComplete' : 'Complete'
         }.merge(options)
         response = self.request :DoCapture, params
+        Response.new response
+      end
+
+      def void!(transaction_id, note=nil)
+        params = {
+          :AUTHORIZATIONID  => transaction_id,
+          :NOTE             => note,
+        }
+        response = self.request :DoVoid, params
         Response.new response
       end
 

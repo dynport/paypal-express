@@ -31,7 +31,7 @@ describe Paypal::Express::Response do
   end
 
   context 'when pay_on_paypal option is given' do
-    let(:response) { request.setup payment_request, return_url, cancel_url, :pay_on_paypal => true }
+    let(:response) { request.setup payment_request, return_url, cancel_url, {}, :pay_on_paypal => true }
 
     subject { response }
     its(:pay_on_paypal) { should be_true }

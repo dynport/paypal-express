@@ -84,7 +84,7 @@ describe Paypal::Express::Request do
 
     it 'should support no_shipping option' do
       expect do
-        instance.setup instant_payment_request, return_url, cancel_url, :no_shipping => true
+        instance.setup instant_payment_request, return_url, cancel_url, {}, :no_shipping => true
       end.should request_to nvp_endpoint, :post
       instance._method_.should == :SetExpressCheckout
       instance._sent_params_.should == {
@@ -193,6 +193,25 @@ describe Paypal::Express::Request do
         :AMT              => '14.00',
         :CURRENCYCODE     => :EUR,
         :COMPLETETYPE     => 'Complete'
+      }
+    end
+  end
+
+  describe '#void!' do
+    it 'should return Paypal::Express::Response' do
+      fake_response 'DoVoid/success'
+      response = instance.void! 'authorization_id'
+      response.should be_instance_of(Paypal::Express::Response)
+    end
+
+    it 'should call DoVoid' do
+      expect do
+        instance.void! 'authorization_id'
+      end.should request_to nvp_endpoint, :post
+      instance._method_.should == :DoVoid
+      instance._sent_params_.should == {
+        :AUTHORIZATIONID  => 'authorization_id',
+        :NOTE             => nil
       }
     end
   end
