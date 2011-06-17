@@ -16,7 +16,9 @@ module Paypal
         :TIMESTAMP => :timestamp,
         :TOKEN => :token,
         :VERSION => :version,
-        :AUTHORIZATIONID => :transaction_id
+        :AUTHORIZATIONID => :authorization_id,
+        :TRANSACTIONID => :transaction_id,
+        :PAYMENTSTATUS => :payment_status
       }
       attr_accessor *@@attribute_mapping.values
       attr_accessor :shipping_options_is_default, :success_page_redirect_requested, :insurance_option_selected
