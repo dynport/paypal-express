@@ -8,6 +8,7 @@ describe Paypal::Payment::Request do
       :shipping_amount => 1.5,
       :currency_code => :JPY,
       :description => 'Instant Payment Request',
+      :invnum => 'AB:12345',
       :notify_url => 'http://merchant.example.com/notify',
       :items => [{
         :quantity => 2,
@@ -38,6 +39,7 @@ describe Paypal::Payment::Request do
       instant_request.amount.shipping.should == 1.5
       instant_request.currency_code.should == :JPY
       instant_request.description.should == 'Instant Payment Request'
+      instant_request.invnum.should == 'AB:12345'
       instant_request.notify_url.should == 'http://merchant.example.com/notify'
     end
 
@@ -56,6 +58,7 @@ describe Paypal::Payment::Request do
         :PAYMENTREQUEST_0_SHIPPINGAMT => "1.50",
         :PAYMENTREQUEST_0_CURRENCYCODE => :JPY,
         :PAYMENTREQUEST_0_DESC => "Instant Payment Request", 
+        :PAYMENTREQUEST_0_INVNUM => "AB:12345", 
         :PAYMENTREQUEST_0_NOTIFYURL => "http://merchant.example.com/notify",
         :PAYMENTREQUEST_0_ITEMAMT => "23.80",
         :L_PAYMENTREQUEST_0_NAME0 => "Item1",

@@ -1,7 +1,7 @@
 module Paypal
   module Payment
     class Request < Base
-      attr_optional :action, :currency_code, :description, :notify_url, :billing_type, :billing_agreement_description
+      attr_optional :action, :currency_code, :description, :notify_url, :billing_type, :billing_agreement_description, :invnum
       attr_accessor :amount, :items
 
       def initialize(attributes = {})
@@ -29,6 +29,7 @@ module Paypal
           :"PAYMENTREQUEST_#{index}_SHIPPINGAMT" => Util.formatted_amount(self.amount.shipping),
           :"PAYMENTREQUEST_#{index}_CURRENCYCODE" => self.currency_code,
           :"PAYMENTREQUEST_#{index}_DESC" => self.description,
+          :"PAYMENTREQUEST_#{index}_INVNUM" => self.invnum,
           # NOTE:
           #  notify_url works only when DoExpressCheckoutPayment called.
           #  recurring payment doesn't support dynamic notify_url.
