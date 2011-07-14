@@ -153,6 +153,24 @@ describe Paypal::Express::Request do
     end
   end
 
+  describe '#transaction_details' do
+    it 'should return Paypal::Express::Response' do
+      fake_response 'GetTransactionDetails/success'
+      response = instance.transaction_details 'transaction_id'
+      response.should be_instance_of(Paypal::Express::Response)
+    end
+
+    it 'should call GetExpressCheckoutDetails' do
+      expect do
+        instance.transaction_details 'transaction_id'
+      end.should request_to nvp_endpoint, :post
+      instance._method_.should == :GetTransactionDetails
+      instance._sent_params_.should == {
+        :TRANSACTIONID => 'transaction_id'
+      }
+    end
+  end
+
   describe '#checkout!' do
     it 'should return Paypal::Express::Response' do
       fake_response 'DoExpressCheckoutPayment/success'
